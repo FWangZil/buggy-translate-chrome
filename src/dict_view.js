@@ -33,35 +33,35 @@
     G.play_audio = 0; // 是否自动播放读音　0:不播放　1:播放第一个 2:播放第二个
     G.panel_show_time = 9; // 浮动框自动消失的时间，单位为秒
     _.init = function(wnd, isPop){
-        console.log('[Buggy Translate] DictionaryView.init called with isPop:', isPop);
+       // console.log('[Buggy Translate] DictionaryView.init called with isPop:', isPop);
         winTop = wnd;
         G.isPop = isPop;
-        console.log('[Buggy Translate] DictionaryView.init completed');
+       // console.log('[Buggy Translate] DictionaryView.init completed');
     }
     G.box_is_showing = false;
     // 更新设置项
     _.setOptions = function(options){
-        console.log('[Buggy Translate] DictionaryView.setOptions called with:', options);
+       // console.log('[Buggy Translate] DictionaryView.setOptions called with:', options);
         if(options != null){
             for(var key in options){
                 G[key] = options[key];
             }
             resetViewOptions();
-            console.log('[Buggy Translate] DictionaryView options updated:', G);
+           // console.log('[Buggy Translate] DictionaryView options updated:', G);
             L.debug("set option, G is", G);
         } else {
-            console.log('[Buggy Translate] No options provided to DictionaryView.setOptions');
+           // console.log('[Buggy Translate] No options provided to DictionaryView.setOptions');
         }
     }
     // 设置改变后，重新设置可能改变的选项
     function resetViewOptions(){
-        console.log('[Buggy Translate] resetViewOptions called, dictThemeBox:', dictThemeBox);
+       // console.log('[Buggy Translate] resetViewOptions called, dictThemeBox:', dictThemeBox);
         if(dictThemeBox && dictThemeBox.length > 0){
             dictThemeBox.removeClass();
             dictThemeBox.addClass(G.theme);
-            console.log('[Buggy Translate] Theme updated to:', G.theme);
+           // console.log('[Buggy Translate] Theme updated to:', G.theme);
         } else {
-            console.log('[Buggy Translate] dictThemeBox not ready, skipping theme update');
+           // console.log('[Buggy Translate] dictThemeBox not ready, skipping theme update');
         }
     }
     // 启动关闭浮动框的计时器
@@ -78,36 +78,36 @@
     
     // 浮动框的定位和显示
     function showBox(){
-        console.log('[Buggy Translate] showBox called, dictBox:', dictBox);
-        console.log('[Buggy Translate] Box location setting:', G.box_location);
-        console.log('[Buggy Translate] Mouse position:', G.mouse);
+       // console.log('[Buggy Translate] showBox called, dictBox:', dictBox);
+       // console.log('[Buggy Translate] Box location setting:', G.box_location);
+       // console.log('[Buggy Translate] Mouse position:', G.mouse);
         dictBox.removeClass("dict_hide");
         G.box_is_showing = true;
         if(G.box_location == 0){
-            console.log('[Buggy Translate] Positioning box at corner');
+           // console.log('[Buggy Translate] Positioning box at corner');
             // L.debug("box location : at corner " + G.box_location);
             dictBox.css({"top":"10px", "right":"10px", "left":""});
         }else{
-            console.log('[Buggy Translate] Positioning box near mouse at:', G.mouse.x, G.mouse.y);
+           // console.log('[Buggy Translate] Positioning box near mouse at:', G.mouse.x, G.mouse.y);
             // L.debug("box location : nearby word " + G.box_location);
             dictBox.css({"top":G.mouse.y + "px", "left":G.mouse.x + "px", "right":""});
         }
-        console.log('[Buggy Translate] Box shown successfully');
+       // console.log('[Buggy Translate] Box shown successfully');
     }
     // 浮动框隐藏
     _.hideBox = function(){
-        console.log('[Buggy Translate] hideBox called');
+       // console.log('[Buggy Translate] hideBox called');
         dictBox.addClass("dict_hide");
         G.box_is_showing = false;
-        console.log('[Buggy Translate] Box hidden');
+       // console.log('[Buggy Translate] Box hidden');
     }
     _.handleClick = function(){
-        console.log('[Buggy Translate] DictionaryView.handleClick called');
-        console.log('[Buggy Translate] close_by_click setting:', G.close_by_click);
+       // console.log('[Buggy Translate] DictionaryView.handleClick called');
+       // console.log('[Buggy Translate] close_by_click setting:', G.close_by_click);
         L.debug("View.getG().close_by_click:", G.close_by_click)
         if(G.close_by_click == 1){
             var inDictBox = isClickDictBox();
-            console.log('[Buggy Translate] Click in dict box:', inDictBox);
+           // console.log('[Buggy Translate] Click in dict box:', inDictBox);
             if(!inDictBox){
                 _.hideBox();
             }
@@ -137,22 +137,22 @@
 
     // 显示单词释义，定时后隐藏
     _.showWord = function(word){
-        console.log('[Buggy Translate] showWord called with word:', word);
+       // console.log('[Buggy Translate] showWord called with word:', word);
         L.debug("fun showWord:", dictBox);
         _.fillDictContent(word);
         showBox();
         startTimer();
-        console.log('[Buggy Translate] showWord completed');
+       // console.log('[Buggy Translate] showWord completed');
     }
     // 显示正在查词，定时后隐藏
     _.showMsg = function(msg){
-        console.log('[Buggy Translate] showMsg called with message:', msg);
+       // console.log('[Buggy Translate] showMsg called with message:', msg);
         L.debug("fun showMsg:", msg);
         _.clearDictContent();
         dictRef.msg.html(msg);
         showBox();
         startTimer();
-        console.log('[Buggy Translate] showMsg completed');
+       // console.log('[Buggy Translate] showMsg completed');
     }
 
     // 单词内容填充页面
@@ -210,60 +210,60 @@
 
     // 加载页面内容（Chrome版本）
     _.loadPage = function(){
-        console.log('[Buggy Translate] loadPage called');
+       // console.log('[Buggy Translate] loadPage called');
         // 获取各种资源的链接
         RES.imgs = {};
         RES.imgs.remind = chrome.runtime.getURL("imgs/remind.png");
-        console.log('[Buggy Translate] Remind image URL:', RES.imgs.remind);
+       // console.log('[Buggy Translate] Remind image URL:', RES.imgs.remind);
         
         var viewUrl = chrome.runtime.getURL("html/component.html");
-        console.log('[Buggy Translate] Component HTML URL:', viewUrl);
+       // console.log('[Buggy Translate] Component HTML URL:', viewUrl);
         L.debug("viewUrl:", viewUrl);
         
         // 使用fetch替代jQuery的$.get
         fetch(viewUrl)
         .then(response => {
-            console.log('[Buggy Translate] Component HTML fetch response:', response.status);
+           // console.log('[Buggy Translate] Component HTML fetch response:', response.status);
             if (!response.ok) {
                 throw new Error('Failed to load component HTML: ' + response.statusText);
             }
             return response.text();
         })
         .then(resp => {
-            console.log('[Buggy Translate] Component HTML loaded, length:', resp.length);
+           // console.log('[Buggy Translate] Component HTML loaded, length:', resp.length);
             // L.debug(resp)
             var all = $(resp);
-            console.log('[Buggy Translate] jQuery parsed HTML elements:', all.length);
+           // console.log('[Buggy Translate] jQuery parsed HTML elements:', all.length);
             L.debug("all:", all)
             dictBox = all.find("#buggy_dict_box");
-            console.log('[Buggy Translate] Found dictBox:', dictBox.length > 0);
+           // console.log('[Buggy Translate] Found dictBox:', dictBox.length > 0);
             dictThemeBox = dictBox.find("#buggy_dict_theme_box");
-            console.log('[Buggy Translate] Found dictThemeBox:', dictThemeBox.length > 0);
+           // console.log('[Buggy Translate] Found dictThemeBox:', dictThemeBox.length > 0);
 
             dictRef.msg = dictBox.find("#msg");
             dictRef.text = dictBox.find(".text");
             dictRef.pronounce = dictBox.find(".pronounce");
             dictRef.translate = dictBox.find(".translate");
-            console.log('[Buggy Translate] Dictionary elements found - msg:', dictRef.msg.length, 'text:', dictRef.text.length, 'pronounce:', dictRef.pronounce.length, 'translate:', dictRef.translate.length);
+           // console.log('[Buggy Translate] Dictionary elements found - msg:', dictRef.msg.length, 'text:', dictRef.text.length, 'pronounce:', dictRef.pronounce.length, 'translate:', dictRef.translate.length);
             L.debug("dict box:", dictBox);
             
             COM.pronAudio = all.find("#pron_audio").find("span"); // 发音的音频显示组件
             COM.pronAudio.find("img").attr("src", RES.imgs.remind);
-            console.log('[Buggy Translate] Audio component setup completed');
+           // console.log('[Buggy Translate] Audio component setup completed');
 
             if(G.isPop){
-                console.log('[Buggy Translate] Initializing as popup');
+               // console.log('[Buggy Translate] Initializing as popup');
                 _.initPop();
             }else{
-                console.log('[Buggy Translate] Initializing as page content');
+               // console.log('[Buggy Translate] Initializing as page content');
                 _.initPage();
             }
             
             // 重新应用选项设置，确保主题等设置生效
-            console.log('[Buggy Translate] Reapplying options after DOM ready');
+           // console.log('[Buggy Translate] Reapplying options after DOM ready');
             resetViewOptions();
             
-            console.log('[Buggy Translate] loadPage completed successfully');
+           // console.log('[Buggy Translate] loadPage completed successfully');
         })
         .catch(error => {
             console.error('[Buggy Translate] Error loading component HTML:', error);
@@ -273,7 +273,7 @@
     
     // 普通页面的初始化
     _.initPage = function(){
-        console.log('[Buggy Translate] initPage called');
+       // console.log('[Buggy Translate] initPage called');
         // 设置浮动框　z-index
         // 有bug, 取不到最大值　https://www.zhihu.com/question/52284255/answer/130343309
         // var maxZ = Math.max.apply(null,$.map($('body > *'), function(e,n){
@@ -282,15 +282,15 @@
         // }));
         
         maxZ = 2147483647; // 直接设置成数值上限吧
-        console.log('[Buggy Translate] Setting dictBox z-index to:', maxZ);
+       // console.log('[Buggy Translate] Setting dictBox z-index to:', maxZ);
         dictBox.css("z-index", maxZ); // 设置显示在最上层
         
         // 鼠标在上方时，不消失
         dictBox.mouseover(function(){
-            console.log('[Buggy Translate] Mouse over dictBox, clearing timer');
+           // console.log('[Buggy Translate] Mouse over dictBox, clearing timer');
             clearTimeout(dictTimer);
         }).mouseout(function(){
-            console.log('[Buggy Translate] Mouse out of dictBox, setting hide timer');
+           // console.log('[Buggy Translate] Mouse out of dictBox, setting hide timer');
             dictTimer = setTimeout(function(){
                 _.hideBox();
             }, 3000);
@@ -298,27 +298,27 @@
         
         // 关闭浮动框
         $(".title_div .close", dictBox).click(function(){
-            console.log('[Buggy Translate] Close button clicked');
+           // console.log('[Buggy Translate] Close button clicked');
             _.hideBox();
         });
         dictBox.addClass("fix_box"); // 普通网页中固定位置
-        console.log('[Buggy Translate] Appending dictBox to HTML');
+       // console.log('[Buggy Translate] Appending dictBox to HTML');
         $("html").append(dictBox);
-        console.log('[Buggy Translate] initPage completed, dictBox appended to DOM');
+       // console.log('[Buggy Translate] initPage completed, dictBox appended to DOM');
     }
     // pop 窗口的初始化
     _.initPop = function(){
-        console.log('[Buggy Translate] initPop called');
+       // console.log('[Buggy Translate] initPop called');
         dictBox.removeClass("dict_hide");
         dictBox.find(".title_div").addClass("dict_hide")
         $("#pop_box").append(dictBox);
-        console.log('[Buggy Translate] initPop completed');
+       // console.log('[Buggy Translate] initPop completed');
     }
     
     // 记录鼠标位置
     _.mouse = function(x, y, e){
-        console.log('[Buggy Translate] mouse position updated:', x, y);
-        console.log('[Buggy Translate] mouse element:', e.target);
+       // console.log('[Buggy Translate] mouse position updated:', x, y);
+       // console.log('[Buggy Translate] mouse element:', e.target);
         G.mouse.x = x;
         G.mouse.y = y;
         G.mouse.ele = e;

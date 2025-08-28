@@ -64,89 +64,89 @@
 
     // 检查是否要查字典
     _.checkSelection = function(winClick){
-        console.log('[Buggy Translate] checkSelection called with winClick:', winClick);
+       // console.log('[Buggy Translate] checkSelection called with winClick:', winClick);
         var text = "";
         try{
             var target = View.getG().mouse.ele.target;
-            console.log('[Buggy Translate] Target element:', target);
+           // console.log('[Buggy Translate] Target element:', target);
             // 如果是input textarea之类的，FF中用 window.getSelection 取不到，所以提前用它们的方法取值
             if(target.value != null){
                 var eleIsSelect = target.type.indexOf('select') >= 0;
-                console.log('[Buggy Translate] Element type:', target.type, 'is select:', eleIsSelect);
+               // console.log('[Buggy Translate] Element type:', target.type, 'is select:', eleIsSelect);
                 L.debug("ele.target type:", target.type, " is select:", eleIsSelect);
                 if(!eleIsSelect){
                     text = target.value.substring(target.selectionStart, target.selectionEnd);
-                    console.log('[Buggy Translate] Text from input element:', text);
+                   // console.log('[Buggy Translate] Text from input element:', text);
                 }
             }
         }catch(err){
-            console.log('[Buggy Translate] Error getting target element text:', err);
+           // console.log('[Buggy Translate] Error getting target element text:', err);
             // 一般不会出错，　出错也不理它就好了
         }
         if(text == null || text.length == 0){
             text = _.getSelectedText(winClick);
-            console.log('[Buggy Translate] Text from getSelectedText:', text);
+           // console.log('[Buggy Translate] Text from getSelectedText:', text);
         }
-        console.log('[Buggy Translate] Final selected text:', text);
+       // console.log('[Buggy Translate] Final selected text:', text);
         L.debug("text is :" + text);
         if(text.length > 10 && !alphabetReg.test(text)){ // 长度大于１０且不是全英文的内容不处理
-            console.log('[Buggy Translate] Text too long and not English, ignoring:', text);
+           // console.log('[Buggy Translate] Text too long and not English, ignoring:', text);
             text = "";
         }
         // 只处理英文
         if(!englishReg.test(text)){
-            console.log('[Buggy Translate] Text contains non-English characters, filtering:', text);
+           // console.log('[Buggy Translate] Text contains non-English characters, filtering:', text);
             text = text.replace(notEnglishReg, "");
-            console.log('[Buggy Translate] Filtered text:', text);
+           // console.log('[Buggy Translate] Filtered text:', text);
         }
         text = St.trim(text);
         
         // 数字不处理
         if(/^\d+$/.test(text)){
-            console.log('[Buggy Translate] Text is pure number, ignoring:', text);
+           // console.log('[Buggy Translate] Text is pure number, ignoring:', text);
             text = "";
         }
         
-        console.log('[Buggy Translate] Processed text:', text);
+       // console.log('[Buggy Translate] Processed text:', text);
         L.debug("after replace text is :" + text);
 
         // 如果设置是只查单词,则有空白时不查
         if(G.only_word == 1 && /\s/.test(text)){
-            console.log('[Buggy Translate] Only word mode enabled, ignoring phrase:', text);
+           // console.log('[Buggy Translate] Only word mode enabled, ignoring phrase:', text);
             text = "";
         }
         
         if(text != null && text.length > 0){
-            console.log('[Buggy Translate] Valid text found, checking if should translate:', text);
-            console.log('[Buggy Translate] Box showing:', View.getG().box_is_showing, 'Last word:', G.lastWord);
+           // console.log('[Buggy Translate] Valid text found, checking if should translate:', text);
+           // console.log('[Buggy Translate] Box showing:', View.getG().box_is_showing, 'Last word:', G.lastWord);
             if(!View.getG().box_is_showing || text != G.lastWord){
-                console.log('[Buggy Translate] Starting translation for:', text);
+               // console.log('[Buggy Translate] Starting translation for:', text);
                 G.lastWord = text;
                 _.searchWord(text);
             } else {
-                console.log('[Buggy Translate] Same word already showing, skipping translation');
+               // console.log('[Buggy Translate] Same word already showing, skipping translation');
             }
         }else{
-            console.log('[Buggy Translate] No valid text to translate, handling click');
+           // console.log('[Buggy Translate] No valid text to translate, handling click');
             View.handleClick();
         }
     }
     // 取选中的文字
     _.getSelectedText = function(winClick){
-        console.log('[Buggy Translate] getSelectedText called with winClick:', winClick);
+       // console.log('[Buggy Translate] getSelectedText called with winClick:', winClick);
         L.debug("chu dian shen a ")
         // firefox中有 window.getSelection, 但是不返回　textarea 中的选中内容
         if(winClick.getSelection) {
-            console.log('[Buggy Translate] Using window.getSelection');
+           // console.log('[Buggy Translate] Using window.getSelection');
             L.debug("window.getSelection")
             var selText = winClick.getSelection().toString();
-            console.log('[Buggy Translate] Selected text from getSelection:', selText);
+           // console.log('[Buggy Translate] Selected text from getSelection:', selText);
             return selText;
         } else {
-            console.log('[Buggy Translate] Using document.selection (IE fallback)');
+           // console.log('[Buggy Translate] Using document.selection (IE fallback)');
             L.debug("document.selection")
             var text = winClick.document.selection.createRange().text;
-            console.log('[Buggy Translate] Selected text from document.selection:', text);
+           // console.log('[Buggy Translate] Selected text from document.selection:', text);
             return text;
         }
     }
@@ -163,14 +163,14 @@
 
     // 查询单词（Chrome版本使用fetch API）
     _.searchWord = function(text, isPop){
-        console.log('[Buggy Translate] searchWord called with text:', text, 'isPop:', isPop);
-        console.log('[Buggy Translate] Current API setting:', G.api);
+       // console.log('[Buggy Translate] searchWord called with text:', text, 'isPop:', isPop);
+       // console.log('[Buggy Translate] Current API setting:', G.api);
         L.debug("search text:" + text);
         
         View.showMsg("正在查词:" + text + "...");
         
         var api = API[G.api];
-        console.log('[Buggy Translate] Using API config:', api);
+       // console.log('[Buggy Translate] Using API config:', api);
         var url = new URL(api.url);
         
         // 构建查询参数
@@ -182,7 +182,7 @@
         });
         
         // 通过background script发送请求以避免CORS问题
-        console.log('[Buggy Translate] Sending translate request to background script:', url.toString());
+       // console.log('[Buggy Translate] Sending translate request to background script:', url.toString());
         chrome.runtime.sendMessage({
             type: 'translate_request',
             data: {
@@ -191,11 +191,11 @@
                 api: G.api
             }
         }, (response) => {
-            console.log('[Buggy Translate] Received response from background:', response);
+           // console.log('[Buggy Translate] Received response from background:', response);
             if (response && response.success && response.html) {
-                console.log('[Buggy Translate] HTML response received, length:', response.html.length);
+               // console.log('[Buggy Translate] HTML response received, length:', response.html.length);
                 var word = parseWord(response.html);
-                console.log('[Buggy Translate] Parsed word result:', word);
+               // console.log('[Buggy Translate] Parsed word result:', word);
                 L.debug("word is:", word);
                 View.showWord(word, isPop);
             } else {
@@ -296,15 +296,15 @@
 
     // 设置选项（Chrome版本）
     _.setOptions = function(options) {
-        console.log('[Buggy Translate] Dictionary.setOptions called with:', options);
+       // console.log('[Buggy Translate] Dictionary.setOptions called with:', options);
         if (options != null) {
             for (var key in options) {
                 G[key] = options[key];
             }
-            console.log('[Buggy Translate] Dictionary options updated:', G);
+           // console.log('[Buggy Translate] Dictionary options updated:', G);
             L.debug("Dictionary options set:", G);
         } else {
-            console.log('[Buggy Translate] No options provided to setOptions');
+           // console.log('[Buggy Translate] No options provided to setOptions');
         }
     }
     
@@ -315,10 +315,10 @@
     }
     
     _.init = function() {
-        console.log('[Buggy Translate] Dictionary.init called');
+       // console.log('[Buggy Translate] Dictionary.init called');
         // Chrome版本的初始化
         // 选项加载在init.js中通过消息传递处理
-        console.log('[Buggy Translate] Dictionary initialization completed');
+       // console.log('[Buggy Translate] Dictionary initialization completed');
         L.debug("Dictionary initialized for Chrome");
     }
 
