@@ -1,16 +1,9 @@
 {
-
-    "manifest_version": 2,
-    "name": "buggy-translate",
-    "version": "0.2.4",
-
-    "description": "a browser extension to translate words selected in  page",
+    "manifest_version": 3,
+    "name": "Buggy Translate Chrome",
+    "version": "1.0.0",
+    "description": "A Chrome extension to translate words selected on web pages",
     "homepage_url": "https://github.com/qinglangee/buggy-translate",
-    "applications": {
-        "gecko": {
-            "id": "buggy-translate@xmalloc.com"
-        }
-    },
     "icons": {
         "48": "icons/bug-48.png",
         "96": "icons/bug-96.png"
@@ -18,8 +11,9 @@
 
     "permissions": [
         "activeTab",
-        "tabs",
-        "storage",
+        "storage"
+    ],
+    "host_permissions": [
         "*://dict.youdao.com/*",
         "*://www.baidu.com/*",
         "*://cn.bing.com/*"
@@ -42,15 +36,22 @@
         "page": "option/option.html"
     },
 
-    "browser_action": {
+    "action": {
         "default_icon": "icons/bug-32.png",
-        "default_title": "buggy",
+        "default_title": "Buggy Translate",
         "default_popup": "popup/quick_search.html"
+    },
+    "background": {
+        "service_worker": "src/background-script.js"
     },
 
     "web_accessible_resources": [
-        "html/component.html",
-        "imgs/remind.png"
+        {
+            "resources": [
+                "html/component.html",
+                "imgs/remind.png"
+            ],
+            "matches": ["<all_urls>"]
+        }
     ]
-
 }

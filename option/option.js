@@ -1,84 +1,67 @@
 var L = ZhchLog;
 
-// 保存单选的设置
+// Chrome版本：保存单个设置项
 function saveSingleValue(key, value) {
-    var singlePromise = browser.storage.local.get("single");
-    singlePromise.then(saveSingle);
-    
-    function saveSingle(result){
-        var single = result.single;
-        if(single == null){
-            single = {};
-        }
-        
-        single[key] = value;
-        saveOptions("single", single);
-    }
-}
-
-// 错误处理
-function onError(error) {
-    L.error(`Error: ${error}`);
-}
-// 向指定tabs发送消息
-function sendMessageToTabs(tabs) {
-    for (let tab of tabs) {
-        browser.tabs.sendMessage(
-            tab.id,
-            {"type":"change_option"}
-        ).then(response => {
-            L.debug("Message from the content script:");
-            // L.debug(response.response);
-        }).catch(onError);
-    }
-}
-// 选项保存到storage中，发通知给本窗口的所有标签页
-function saveOptions(key, value) {
+    // 直接保存到Chrome storage sync
     var option = {};
     option[key] = value;
-    setPromise = browser.storage.local.set(option);
-    setPromise.then(function(){
-        L.debug("send a message for save options.");
-        browser.tabs.query({
-            currentWindow: true,
-            url: ["<all_urls>"]
-        }).then(sendMessageToTabs).catch(onError);
+    
+    chrome.storage.sync.set(option, function() {
+        if (chrome.runtime.lastError) {
+            L.error('Error saving option:', chrome.runtime.lastError);
+        } else {
+            L.debug('Option saved:', key, value);
+            // 通知background script选项已更改
+            chrome.runtime.sendMessage({
+                type: 'set_options',
+                options: option
+            });
+        }
     });
 }
 
-function restoreOptions() {
-    // 恢复单选的设置
-    function setSingleChoice(result) {
-        var single = result.single;
-        L.debug("single is ", single)
-        if(single == null){
-            return;
-        }
-        for(var key in single){
-            var value = single[key];
-            L.debug("restore value:", key, value);
-            var ele = $("#" + value);
-            if(ele != null){
-                ele.attr("checked", "checked");
-            }
-        }
-    }
-
-    function onError(error) {
-        console.error(`Error: ${error}`);
-    }
-
-    var getting = browser.storage.local.get("single");
-    getting.then(setSingleChoice, onError);
+// Chrome版本：错误处理
+function onError(error) {
+    L.error('Error:', error);
 }
 
-// 存储文本输入框内容
-function saveInputTxt(){
-    $(".input_txt").each(function(){
+// Chrome版本：恢复选项设置
+function restoreOptions() {
+    chrome.storage.sync.get(null, function(result) {
+        if (chrome.runtime.lastError) {
+            onError(chrome.runtime.lastError);
+            return;
+        }
+        
+        L.debug('Restored options:', result);
+        
+        // 恢复单选框设置
+        for (var key in result) {
+            var value = result[key];
+            L.debug('Restore value:', key, value);
+            
+            // 对于单选框，根据name和value设置选中状态
+            var radioElement = $('input[name="' + key + '"][value="' + value + '"]');
+            if (radioElement.length > 0) {
+                radioElement.prop('checked', true);
+            }
+            
+            // 对于文本输入框
+            var inputElement = $('input[name="' + key + '"]');
+            if (inputElement.hasClass('input_txt')) {
+                inputElement.val(value);
+            }
+        }
+    });
+}
+
+// Chrome版本：存储文本输入框内容
+function saveInputTxt() {
+    $('.input_txt').each(function() {
         var ele = $(this);
-        var key = ele.attr("name"); // 单选项的name作为key
-        var value = ele.val(); // value 作为　value
-        L.debug(key + ":" + value);
+        var key = ele.attr('name');
+        var value = ele.val();
+        L.debug(key + ':' + value);
         saveSingleValue(key, value);
     });
 }
@@ -86,23 +69,24 @@ function saveInputTxt(){
 // 页面加载完成事件
 document.addEventListener("DOMContentLoaded", restoreOptions);
 
-// 处理单选框点击事件
-$(".single_choice").on("click", function(){
+// Chrome版本：处理单选框点击事件
+$('.single_choice').on('click', function() {
     var ele = $(this);
-    var key = ele.attr("name"); // 单选项的name作为key
-    var value = ele.val(); // value 作为　value
-    L.debug("select option:",key, value);
+    var key = ele.attr('name');
+    var value = ele.val();
+    L.debug('Select option:', key, value);
     saveSingleValue(key, value);
 });
 
-// 处理文本输入事件
-$(".input_txt").on("blur", function(){
+// Chrome版本：处理文本输入事件
+$('.input_txt').on('blur', function() {
     var ele = $(this);
-    // 先判断是数字, 并且范围是 0 < x < 101
-    if(/^\d+$/.test(ele.val()) && ele.val() > 0 && ele.val() < 101){ 
+    // 验证数字范围 0 < x < 101
+    if (/^\d+$/.test(ele.val()) && ele.val() > 0 && ele.val() < 101) {
         saveInputTxt();
-    }else{
+    } else {
         ele.val(9);
+        saveInputTxt(); // 保存默认值
     }
 })
 

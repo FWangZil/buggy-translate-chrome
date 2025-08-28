@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Buggy Translate Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .word {
+            background-color: #e8f4f8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 2px;
+        }
+        .word:hover {
+            background-color: #d1ecf1;
+        }
+        .status {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐛 Buggy Translate Chrome Extension Test Page</h1>
+    
+    <div class="status">
+        ✅ 扩展已成功修复CORS和HTTPS问题！现在可以正常翻译了。
+    </div>
+    
+    <div class="test-section">
+        <h2>📝 测试说明</h2>
+        <ol>
+            <li>确保Buggy Translate Chrome扩展已加载并启用</li>
+            <li>选中下面的英文单词</li>
+            <li>翻译浮窗应该出现在页面右上角</li>
+            <li>按F12查看控制台调试信息</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎯 简单单词测试</h2>
+        <p>点击或选中这些单词进行测试：</p>
+        <div>
+            <span class="word">hello</span>
+            <span class="word">world</span>
+            <span class="word">test</span>
+            <span class="word">apple</span>
+            <span class="word">computer</span>
+            <span class="word">beautiful</span>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📚 复杂单词测试</h2>
+        <p>测试更复杂的单词：</p>
+        <div>
+            <span class="word">development</span>
+            <span class="word">technology</span>
+            <span class="word">implementation</span>
+            <span class="word">architecture</span>
+            <span class="word">optimization</span>
+            <span class="word">configuration</span>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📖 句子中的单词测试</h2>
+        <p>在句子中选择单词进行测试：</p>
+        <p>The <span class="word">extension</span> is working <span class="word">perfectly</span> now. We have successfully <span class="word">resolved</span> the CORS and HTTPS <span class="word">issues</span>.</p>
+        <p>Chrome <span class="word">extensions</span> require proper <span class="word">configuration</span> to handle <span class="word">network</span> requests <span class="word">securely</span>.</p>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔧 技术词汇测试</h2>
+        <p>测试技术相关词汇：</p>
+        <div>
+            <span class="word">JavaScript</span>
+            <span class="word">Chrome</span>
+            <span class="word">extension</span>
+            <span class="word">manifest</span>
+            <span class="word">service</span>
+            <span class="word">worker</span>
+            <span class="word">content</span>
+            <span class="word">script</span>
+            <span class="word">background</span>
+            <span class="word">popup</span>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎵 发音测试</h2>
+        <p>这些单词应该有发音功能：</p>
+        <div>
+            <span class="word">pronunciation</span>
+            <span class="word">dictionary</span>
+            <span class="word">translate</span>
+            <span class="word">language</span>
+            <span class="word">communication</span>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 测试结果</h2>
+        <p>如果看到翻译浮窗，说明扩展工作正常！</p>
+        <p>如果没有看到浮窗，请检查：</p>
+        <ul>
+            <li>扩展是否已启用</li>
+            <li>控制台是否有错误信息</li>
+            <li>是否正确选中了英文单词</li>
+        </ul>
+    </div>
+    
+    <script>
+        // 添加点击事件来模拟选择
+        document.querySelectorAll('.word').forEach(word => {
+            word.addEventListener('click', function() {
+                // 选中文本
+                const range = document.createRange();
+                range.selectNodeContents(this);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                
+                console.log('Selected word:', this.textContent);
+            });
+        });
+        
+        console.log('🐛 Buggy Translate Test Page loaded');
+        console.log('Click on any highlighted word to test translation');
+    </script>
+</body>
+</html>
